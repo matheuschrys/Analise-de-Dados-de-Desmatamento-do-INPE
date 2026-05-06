@@ -1,48 +1,97 @@
-# Análise de Desmatamento no Brasil (PRODES)
+# Análise de Desmatamento no Brasil (PRODES/INPE)
 
-Este repositório contém um projeto prático desenvolvido para a disciplina de **Programação para Análise de Dados (PAD)**. O objetivo principal deste trabalho é demonstrar a aplicação de conceitos fundamentais de manipulação, limpeza e visualização de dados utilizando a linguagem Python.
+Projeto de análise de dados sobre o desmatamento nos biomas e estados brasileiros entre 2000 e 2023, com dados do projeto PRODES/INPE e metadados municipais brasileiros.
 
-O tema abordado é o desmatamento nos biomas e estados brasileiros entre os anos de 2000 e 2023, utilizando dados oficiais do projeto PRODES (INPE).
+O repositório foi organizado para separar dados, notebook e código reutilizável, facilitando a reprodução da análise e futuras evoluções.
 
-## Objetivos de Aprendizagem
+## Estrutura do projeto
 
-Este notebook demonstra o domínio das seguintes técnicas básicas de Análise de Dados:
-* **Leitura e Carregamento de Dados:** Importação de arquivos CSV.
-* **Junção de Dados (Merge):** Cruzamento de diferentes bases de dados usando chaves em comum (`id_municipio`).
-* **Exploração de Dados:** Uso de métodos como `.info()`, `.describe()` e `.info()`.
-* **Agrupamento e Agregação (Groupby):** Sumarização de dados por ano, bioma e estado.
-* **Engenharia de Recursos (Feature Engineering):** Criação de novas colunas calculadas (ex: conversão de valores para milhões e cálculo de porcentagens).
-* **Visualização de Dados:** Criação de gráficos de linha e barras para extração de insights.
+```text
+.
+├── data/
+│   └── raw/
+│       ├── br_bd_diretorios_brasil_municipio.csv
+│       └── br_inpe_prodes_municipio_bioma.csv
+├── notebooks/
+│   └── Desmatamento_PRODES.ipynb
+├── src/
+│   └── desmatamento_inpe/
+│       ├── __init__.py
+│       ├── __main__.py
+│       ├── analysis.py
+│       └── visualization.py
+├── requirements.txt
+└── README.md
+```
 
-## Base de Dados
+## Objetivos de aprendizagem
 
-Os dados utilizados neste projeto estão inclusos neste repositório em formato `.csv` para facilitar a reprodução do código:
+Este projeto demonstra técnicas fundamentais de análise de dados com Python:
 
-1.  `br_inpe_prodes_municipio_bioma.csv`: Contém o histórico de área total, área desmatada e vegetação natural por município e bioma.
-2.  `br_bd_diretorios_brasil_municipio.csv`: Tabela de diretórios contendo metadados dos municípios brasileiros (como UF, Região, se pertence à Amazônia Legal, etc.).
+- leitura de arquivos CSV;
+- integração de bases com `merge` por `id_municipio`;
+- exploração inicial com `info`, `describe` e inspeção de amostras;
+- agrupamentos e agregações por ano, bioma e UF;
+- criação de colunas derivadas, como valores em milhões e percentuais;
+- visualização com gráficos de linhas e barras.
 
-##  Principais Análises Realizadas
+## Bases de dados
 
-Ao longo do Jupyter Notebook (`Desmatamento_PRODES.ipynb`), as seguintes visualizações e análises foram geradas:
+Os arquivos usados pela análise estão versionados em `data/raw`:
 
-*  **Evolução do Desmatamento Total por Bioma (2000-2023):** Gráfico de linhas mostrando a trajetória do desmatamento ao longo dos anos em diferentes biomas (Amazônia, Cerrado, Mata Atlântica, etc.).
-*  **Área Total Monitorada:** Gráfico demonstrando a proporção de área avaliada em cada bioma.
-*  **Ranking Absoluto de Desmatamento por Estado:** Gráfico de barras horizontais listando os estados que mais desmataram em quilômetros quadrados (km²).
-*  **Ranking Relativo de Desmatamento por Estado:** Gráfico de barras horizontais mostrando os estados que mais perderam vegetação em proporção ao seu tamanho total (%).
+1. `br_inpe_prodes_municipio_bioma.csv`: histórico de área total, área desmatada, vegetação natural, não vegetação natural e hidrografia por município e bioma.
+2. `br_bd_diretorios_brasil_municipio.csv`: metadados dos municípios, incluindo UF, região e indicador de Amazônia Legal.
 
-## Tecnologias Utilizadas
+## Principais análises
 
-* **Python 3.12**
-* **Pandas:** Manipulação e análise dos dados estruturados.
-* **Matplotlib & Seaborn:** Criação das visualizações gráficas.
-* **Jupyter Notebook:** Ambiente de desenvolvimento interativo.
+O notebook `notebooks/Desmatamento_PRODES.ipynb` gera as seguintes visões:
 
-### Como reproduzir essa análise Clone este repositório para a sua máquina.
+- evolução do desmatamento total por bioma;
+- área total monitorada por bioma;
+- percentual de área desmatada por bioma;
+- ranking absoluto de desmatamento por estado;
+- ranking relativo de desmatamento por estado.
 
-- Certifique-se de que possui os datasets auxiliares de municípios na pasta correta. Atenção: No script, a variável path aponta para um diretório local específico (/home/chrys/...). Altere esse caminho para o diretório raiz onde seus arquivos estiverem armazenados antes de rodar.
+## Como reproduzir
 
-- Instale as dependências executando: pip install pandas matplotlib seaborn numpy.
+1. Clone o repositório.
+2. Crie e ative um ambiente virtual, se desejar:
 
-- Inicie o ambiente Jupyter e execute as células sequencialmente.
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
 
-Desenvolvido por Chrys — Bacharelando em Ciência da Computação (IFAM). Testado e homologado com sucesso em ambiente Linux (se você usar Pop!_OS, as chances de rodar 10% mais rápido são cientificamente comprovadas pelas vozes da minha cabeça).
+3. Instale as dependências:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Execute o notebook:
+
+   ```bash
+   jupyter notebook notebooks/Desmatamento_PRODES.ipynb
+   ```
+
+Também é possível executar um resumo das tabelas agregadas pelo módulo Python:
+
+```bash
+PYTHONPATH=src python -m desmatamento_inpe
+```
+
+## Organização do código
+
+- `src/desmatamento_inpe/analysis.py`: concentra carga dos dados e cálculos tabulares.
+- `src/desmatamento_inpe/visualization.py`: concentra funções de visualização.
+- `notebooks/Desmatamento_PRODES.ipynb`: mantém a narrativa da análise, chamando funções reutilizáveis em vez de repetir lógica.
+
+## Tecnologias utilizadas
+
+- Python 3.12+
+- Pandas
+- Matplotlib
+- Seaborn
+- Jupyter Notebook
+
+Desenvolvido originalmente por Chrys — Bacharelando em Ciência da Computação (IFAM).
